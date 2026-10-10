@@ -1,0 +1,1030 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f7f7">
+  <title>Kişisel Portfolyo</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f3f7f7;
+      --ink: #20282b;
+      --muted: #69787d;
+      --line: #dce5e6;
+      --green: #397b88;
+      --green-dark: #245c6a;
+      --sea-pale: #e4f0f1;
+      --white: #fff;
+      --serif: Georgia, "Times New Roman", serif;
+      --sans: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: linear-gradient(180deg, #eaf3f4 0, var(--paper) 340px); color: var(--ink); font-family: var(--sans); }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    [hidden] { display: none !important; }
+    .shell { width: min(1120px, calc(100% - 56px)); margin: 0 auto; }
+    header { height: 76px; border-bottom: 1px solid var(--line); display: flex; align-items: center; }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+    .brand-cluster { display: flex; align-items: center; gap: 13px; }
+    .menu-trigger { width: 40px; height: 40px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 5px; padding: 9px; border: 1px solid transparent; border-radius: 3px; background: transparent; }
+    .menu-trigger:hover { border-color: var(--line); background: white; }
+    .menu-trigger span { display: block; height: 1.5px; background: var(--ink); }
+    .menu-trigger span:nth-child(1), .menu-trigger span:nth-child(3) { width: 14px; }
+    .menu-trigger span:nth-child(2) { width: 20px; }
+    .wordmark { display: flex; align-items: center; gap: 11px; color: var(--ink); text-decoration: none; font-size: 13px; font-weight: 650; }
+    .mark { width: 29px; height: 29px; border: 1px solid var(--green); border-radius: 50%; display: grid; place-items: center; color: var(--green); font-family: var(--serif); font-size: 17px; }
+    .header-note { color: var(--muted); font-size: 12px; letter-spacing: .04em; }
+    .menu-dialog { position: fixed; inset: 0 auto 0 0; width: min(350px, calc(100% - 34px)); height: 100dvh; max-height: none; margin: 0 auto 0 0; padding: 25px 25px 30px; border: 0; border-right: 1px solid var(--line); border-radius: 0; background: var(--paper); box-shadow: 14px 0 45px #20231f18; }
+    .menu-dialog::backdrop { background: #20231f70; backdrop-filter: blur(2px); }
+    .menu-top { display: flex; justify-content: space-between; align-items: center; padding-bottom: 30px; border-bottom: 1px solid var(--line); }
+    .menu-kicker { margin: 0; color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .menu-heading { margin: 29px 0 12px; font-family: var(--serif); font-size: 27px; font-weight: 400; }
+    .menu-links { display: grid; }
+    .menu-link { display: flex; align-items: center; gap: 15px; min-height: 55px; padding: 0 6px; border: 0; border-bottom: 1px solid var(--line); background: transparent; color: var(--ink); text-align: left; font-family: var(--serif); font-size: 19px; }
+    .menu-link span { width: 23px; color: #9a9d94; font-family: var(--sans); font-size: 10px; }
+    .menu-link:hover, .menu-link[aria-current="page"] { color: var(--green-dark); }
+    .menu-link[aria-current="page"] span { color: var(--green); }
+    main { padding: 68px 0 96px; }
+    .page-view { min-height: 58vh; }
+    .content-page { padding-top: 3px; }
+    .page-heading { max-width: 720px; margin-bottom: 45px; }
+    .page-lead { max-width: 630px; margin: 17px 0 0; color: var(--muted); font-size: 16px; line-height: 1.75; }
+    .profile-layout { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); align-items: center; gap: clamp(34px, 7vw, 88px); }
+    .profile-photo { position: relative; width: 100%; max-width: 410px; aspect-ratio: 4 / 5; overflow: hidden; background: var(--sea-pale); }
+    .profile-photo.dragging { outline: 2px dashed var(--green); outline-offset: 4px; }
+    .profile-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .profile-placeholder { width: 100%; height: 100%; display: grid; place-content: center; justify-items: center; gap: 13px; color: var(--green-dark); background: linear-gradient(145deg, #e6f0f0, #d6e7e9); text-align: center; }
+    .profile-placeholder svg { width: 38px; height: 38px; }
+    .profile-placeholder span { font-size: 12px; }
+    .photo-action { position: absolute; right: 13px; bottom: 13px; padding: 10px 12px; border: 1px solid #ffffffa6; border-radius: 3px; background: #f8f8f2e8; color: var(--ink); font-size: 12px; font-weight: 600; cursor: pointer; }
+    .photo-action:hover { background: white; }
+    .profile-copy h1 { font-size: clamp(40px, 5vw, 58px); }
+    .profile-copy h1 span { display: block; }
+    .profile-copy .intro-copy { max-width: 520px; margin: 19px 0 25px; font-size: 15px; line-height: 1.8; }
+    .profile-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .references-note { max-width: 720px; padding: 30px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .references-note h2, .contact-panel h2 { margin: 0 0 10px; font-family: var(--serif); font-size: 25px; font-weight: 400; }
+    .references-note p, .contact-panel p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.75; }
+    .content-edit { margin-top: 19px; }
+    .page-details { max-width: 760px; padding-top: 22px; border-top: 1px solid var(--line); }
+    .page-details p { margin: 0 0 18px; color: var(--muted); font-size: 14px; line-height: 1.8; white-space: pre-line; }
+    .page-details h2 { margin: 30px 0 12px; color: var(--green-dark); font-family: var(--serif); font-size: 27px; font-weight: 600; }
+    .page-details h2:first-child { margin-top: 0; }
+    .page-details h3 { margin: 20px 0 8px; color: var(--ink); font-family: var(--serif); font-size: 19px; font-weight: 700; }
+    .page-details strong { color: var(--ink); font-weight: 700; }
+    .references-list { max-width: 760px; }
+    .reference-item { margin: 0; padding: 22px 0; border-bottom: 1px solid var(--line); color: var(--ink); font-family: var(--serif); font-size: 20px; line-height: 1.6; white-space: pre-line; }
+    .references-empty { margin: 0; color: var(--muted); font-size: 14px; }
+    .contact-panel { max-width: 760px; padding: 30px; border: 1px solid var(--line); background: #fffefa; }
+    .contact-panel p + p { margin-top: 12px; }
+    .contact-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 28px; margin: 26px 0 0; border-top: 1px solid var(--line); }
+    .contact-link { min-width: 0; display: flex; align-items: center; gap: 12px; min-height: 64px; border-bottom: 1px solid var(--line); color: var(--ink); text-decoration: none; font-size: 13px; overflow-wrap: anywhere; }
+    .contact-link:hover { color: var(--green-dark); }
+    .contact-icon { flex: none; width: 31px; height: 31px; display: grid; place-items: center; border-radius: 50%; background: var(--sea-pale); color: var(--green-dark); }
+    .contact-icon svg { width: 16px; height: 16px; }
+    .contact-label { display: block; margin-bottom: 3px; color: var(--muted); font-size: 10px; }
+    .contact-channels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 25px; }
+    .channel-toggle { display: flex; align-items: center; gap: 12px; min-height: 68px; padding: 12px 15px; border: 1px solid var(--line); border-radius: 3px; background: white; color: var(--ink); text-align: left; }
+    .channel-toggle:hover, .channel-toggle[aria-expanded="true"] { border-color: var(--green); background: #f4f9f9; }
+    .channel-toggle .contact-label { color: var(--ink); font-size: 13px; font-weight: 650; }
+    .channel-toggle .channel-hint { display: block; color: var(--muted); font-size: 11px; }
+    .channel-toggle .channel-chevron { margin-left: auto; color: var(--green-dark); transition: transform .2s; }
+    .channel-toggle[aria-expanded="true"] .channel-chevron { transform: rotate(180deg); }
+    .channel-panel { margin-top: 14px; padding: 20px; border: 1px solid var(--line); background: #f7fafa; animation: appear .2s both; }
+    .channel-panel[hidden] { display: none; }
+    .channel-panel h3 { margin: 0 0 6px; font-family: var(--serif); font-size: 20px; font-weight: 400; }
+    .channel-panel p { margin: 0 0 14px; color: var(--muted); font-size: 12px; line-height: 1.6; }
+    .channel-email-address { display: inline-block; margin-bottom: 14px; color: var(--green-dark); font-size: 13px; overflow-wrap: anywhere; }
+    .channel-form label { display: block; margin-bottom: 8px; font-size: 12px; font-weight: 650; }
+    .channel-form textarea { display: block; width: 100%; min-height: 96px; padding: 12px; border: 1px solid var(--line); border-radius: 3px; background: white; color: var(--ink); font: inherit; font-size: 13px; line-height: 1.6; resize: vertical; }
+    .channel-form textarea:focus { border-color: var(--green); outline: 2px solid #397b8820; }
+    .channel-form .button { margin-top: 11px; }
+    .channel-form .button svg { width: 17px; height: 17px; }
+    .intro { display: flex; justify-content: space-between; align-items: end; gap: 24px; margin-bottom: 49px; }
+    .eyebrow { margin: 0 0 11px; color: var(--green); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    h1 { margin: 0; font-family: var(--serif); font-size: clamp(42px, 6vw, 64px); font-weight: 400; line-height: 1.03; }
+    .intro-copy { max-width: 370px; margin: 15px 0 0; color: var(--muted); font-size: 14px; line-height: 1.65; }
+    .button { min-height: 43px; padding: 0 17px; display: inline-flex; align-items: center; justify-content: center; gap: 9px; border: 1px solid var(--green); border-radius: 3px; background: var(--green); color: white; font-size: 13px; font-weight: 600; transition: background .18s, transform .18s; }
+    .button:hover { background: var(--green-dark); transform: translateY(-1px); }
+    .button svg { width: 16px; height: 16px; }
+    .read-only #addProject, .read-only #emptyAdd, .read-only #editProfile, .read-only [data-edit-content], .read-only .photo-action, .read-only .project-actions { display: none !important; }
+    .read-only .profile-photo { cursor: default; }
+    .export-button { white-space: nowrap; }
+    .section-bar { display: flex; align-items: center; justify-content: space-between; padding: 0 0 14px; border-bottom: 1px solid var(--line); }
+    .section-title { margin: 0; font-family: var(--serif); font-size: 21px; font-weight: 400; }
+    .project-count { color: var(--muted); font-size: 12px; }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 34px 22px; padding-top: 23px; }
+    .project { min-width: 0; animation: appear .35s both; }
+    .project-cover { position: relative; display: block; width: 100%; padding: 0; border: 0; overflow: hidden; aspect-ratio: 1.38; background: #e9ebe4; }
+    .project-cover img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s; }
+    .project:hover .project-cover img { transform: scale(1.025); }
+    .project-placeholder { width: 100%; height: 100%; display: grid; place-items: center; color: var(--green-dark); background: linear-gradient(135deg, #e6f0f0, #d6e7e9); font-family: var(--serif); font-size: 42px; }
+    .project-info { display: flex; justify-content: space-between; gap: 12px; align-items: start; padding-top: 13px; }
+    .project-name { margin: 0; font-family: var(--serif); font-size: 19px; font-weight: 400; overflow-wrap: anywhere; }
+    .project-description { margin: 5px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .project-meta { flex: none; color: var(--muted); font-size: 11px; padding-top: 4px; }
+    .project-actions { display: flex; gap: 5px; }
+    .icon-button { width: 30px; height: 30px; display: inline-grid; place-items: center; border: 1px solid transparent; border-radius: 3px; background: transparent; color: var(--muted); }
+    .icon-button:hover { border-color: var(--line); background: white; color: var(--ink); }
+    .icon-button svg { width: 15px; height: 15px; }
+    .empty { margin-top: 23px; min-height: 330px; display: grid; place-items: center; border: 1px dashed #c9cec4; background: rgba(255,255,255,.32); text-align: center; padding: 35px; }
+    .empty[hidden] { display: none; }
+    .empty-inner { max-width: 390px; }
+    .empty-symbol { width: 42px; height: 42px; margin: 0 auto 18px; display: grid; place-items: center; border: 1px solid #ccd2c8; border-radius: 50%; color: var(--green); }
+    .empty-symbol svg { width: 19px; height: 19px; }
+    .empty h2 { margin: 0; font-family: var(--serif); font-size: 24px; font-weight: 400; }
+    .empty p { margin: 9px 0 20px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    dialog { width: min(560px, calc(100% - 28px)); max-height: min(92vh, 850px); padding: 0; border: 1px solid var(--line); border-radius: 4px; background: var(--paper); color: var(--ink); box-shadow: 0 24px 80px #20231f2b; }
+    dialog::backdrop { background: #20231f70; backdrop-filter: blur(2px); }
+    .dialog-head { display: flex; align-items: center; justify-content: space-between; padding: 20px 23px; border-bottom: 1px solid var(--line); }
+    .dialog-head h2 { margin: 0; font-family: var(--serif); font-size: 23px; font-weight: 400; }
+    .close-button { width: 32px; height: 32px; border: 0; background: transparent; color: var(--muted); font-size: 23px; line-height: 1; }
+    .form-body { padding: 22px 23px 24px; }
+    .field { display: block; margin-bottom: 17px; }
+    .field-label { display: block; margin-bottom: 7px; font-size: 12px; font-weight: 650; }
+    .field input, .field textarea, .field select { width: 100%; padding: 10px 11px; border: 1px solid #d9dcd4; border-radius: 3px; background: white; color: var(--ink); outline: none; font-size: 13px; }
+    .field input:focus, .field textarea:focus, .field select:focus { border-color: var(--green); box-shadow: 0 0 0 2px #526a561a; }
+    .field textarea { min-height: 78px; resize: vertical; }
+    .drop-area { min-height: 124px; display: grid; place-items: center; padding: 15px; border: 1px dashed #bcc5b9; border-radius: 3px; background: #fffefa; text-align: center; transition: border-color .15s, background .15s; }
+    .drop-area.dragging { border-color: var(--green); background: #eef2eb; }
+    .drop-area p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
+    .drop-area label { color: var(--green-dark); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; font-weight: 650; }
+    .drop-area svg { width: 20px; height: 20px; margin-bottom: 5px; color: var(--green); }
+    .previews { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+    .preview { position: relative; aspect-ratio: 1; }
+    .preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .preview button { position: absolute; top: 3px; right: 3px; width: 22px; height: 22px; border: 0; border-radius: 50%; background: #20231fce; color: white; font-size: 15px; line-height: 1; }
+    .dialog-actions { display: flex; justify-content: flex-end; gap: 9px; padding-top: 6px; }
+    .button.secondary { color: var(--ink); background: transparent; border-color: var(--line); }
+    .button.secondary:hover { background: white; }
+    .detail-gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 20px 23px; }
+    .detail-gallery img { width: 100%; aspect-ratio: 1.2; object-fit: cover; background: #e9ebe4; }
+    .video-frame { position: relative; aspect-ratio: 16 / 9; margin: 0 23px 20px; background: #e9ebe4; }
+    .video-frame iframe { width: 100%; height: 100%; border: 0; }
+    .video-link { display: inline-flex; align-items: center; gap: 8px; margin: 0 23px 20px; padding: 10px 13px; border: 1px solid var(--line); border-radius: 3px; color: var(--green-dark); background: white; font-size: 13px; font-weight: 600; text-decoration: none; }
+    .video-link:hover { border-color: var(--green); }
+    .detail-copy { padding: 0 23px 24px; }
+    .detail-copy p { color: var(--muted); font-size: 13px; line-height: 1.6; white-space: pre-wrap; }
+    .detail-topline { display: flex; justify-content: space-between; gap: 16px; align-items: center; }
+    .detail-topline h2 { margin: 0; font-family: var(--serif); font-size: 25px; font-weight: 400; }
+    .detail-category { color: var(--green); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+    footer { padding: 23px 0 25px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+    .footer-contacts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px 22px; }
+    .footer-contact { min-width: 0; display: flex; align-items: center; gap: 9px; color: var(--muted); text-decoration: none; font-size: 12px; overflow-wrap: anywhere; }
+    .footer-contact:hover { color: var(--green-dark); }
+    .footer-contact svg { flex: none; width: 15px; height: 15px; color: var(--green); }
+    .footer-note { margin: 18px 0 0; padding-top: 13px; border-top: 1px solid var(--line); color: #929a9b; }
+    @keyframes appear { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 760px) { .shell { width: min(100% - 36px, 600px); } main { padding: 49px 0 70px; } .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 27px 15px; } .intro { align-items: start; margin-bottom: 38px; } .header-note { display: none; } .profile-layout { grid-template-columns: minmax(0, 1fr); gap: 34px; } .profile-photo { width: min(100%, 380px); justify-self: center; } .profile-copy { text-align: center; } .profile-copy .intro-copy { margin-inline: auto; } .profile-actions { justify-content: center; } .footer-contacts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 500px) { .shell { width: calc(100% - 32px); } header { height: 64px; } .intro { display: block; } .intro .button { margin-top: 20px; } .intro-copy { max-width: 310px; } .grid { grid-template-columns: 1fr; gap: 26px; } .project-cover { aspect-ratio: 1.45; } .empty { min-height: 290px; } .previews { grid-template-columns: repeat(4, minmax(0, 1fr)); } .contact-panel { padding: 21px 17px; } .contact-list { grid-template-columns: 1fr; } .contact-channels { gap: 8px; } .channel-toggle { padding: 10px; gap: 8px; } .channel-toggle .contact-icon { width: 28px; height: 28px; } .channel-panel { padding: 16px 13px; } .footer-contacts { gap: 13px 10px; } .footer-contact { align-items: flex-start; font-size: 11px; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell header-inner">
+      <div class="brand-cluster">
+        <button class="menu-trigger" id="menuTrigger" type="button" aria-label="Menüyü aç" aria-haspopup="dialog" aria-controls="siteMenu">
+          <span></span><span></span><span></span>
+        </button>
+        <a class="wordmark" id="homeLink" href="#home" aria-label="Portfolyo ana sayfa"><span class="mark">p</span><span>kişisel portfolyo</span></a>
+      </div>
+      <span class="header-note">KİŞİSEL PORTFOLYO · 2026</span>
+      <button class="button secondary export-button" id="exportSiteData" type="button" hidden>Yayın verisini indir</button>
+      <button class="button" id="addProject" type="button" aria-label="Yeni proje ekle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        Yeni proje
+      </button>
+    </div>
+  </header>
+  <dialog class="menu-dialog" id="siteMenu" aria-labelledby="menuHeading">
+    <div class="menu-top"><span class="mark" aria-hidden="true">p</span><button class="close-button" id="closeMenu" type="button" aria-label="Menüyü kapat">×</button></div>
+    <p class="menu-kicker">Kişisel portfolyo</p>
+    <h2 class="menu-heading" id="menuHeading">Keşfet</h2>
+    <nav class="menu-links" aria-label="Ana menü">
+      <button class="menu-link" type="button" data-page="about"><span>01</span>Hakkımda</button>
+      <button class="menu-link" type="button" data-page="projects"><span>02</span>Projeler</button>
+      <button class="menu-link" type="button" data-page="references"><span>03</span>Referanslar</button>
+      <button class="menu-link" type="button" data-page="contact"><span>04</span>İletişim</button>
+    </nav>
+  </dialog>
+  <main class="shell">
+    <section class="page-view" data-view-panel="projects">
+      <section class="intro" aria-labelledby="pageTitle">
+        <div>
+          <p class="eyebrow">Üretimlerim · 2026</p>
+          <h1 id="pageTitle">Projelerim</h1>
+          <p class="intro-copy">Fikirler, denemeler ve tamamlanmış işler. Küçük bir seçki, zamanla büyüyen bir arşiv.</p>
+        </div>
+      </section>
+      <section aria-labelledby="workTitle">
+        <div class="section-bar"><h2 class="section-title" id="workTitle">Tüm işler</h2><span class="project-count" id="projectCount">0 proje</span></div>
+        <div class="grid" id="projectGrid"></div>
+        <div class="empty" id="emptyState">
+          <div class="empty-inner">
+            <span class="empty-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></span>
+            <h2>İlk projen için yer hazır</h2>
+            <p>Seçili çalışmalarım ve teknik projelerim.</p>
+            <button class="button" id="emptyAdd" type="button">İlk projeyi ekle</button>
+          </div>
+        </div>
+      </section>
+    </section>
+    <section class="page-view profile-layout" data-view-panel="home" hidden>
+      <div class="profile-photo" id="profileDrop">
+        <img id="profileImage" alt="Profil fotoğrafım" hidden>
+        <div class="profile-placeholder" id="profilePlaceholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 21v-1.5a7 7 0 0 1 14 0V21Z"/></svg>
+          <span>Fotoğrafını buraya bırak</span>
+        </div>
+        <label class="photo-action" for="profileInput">Fotoğraf seç</label>
+        <input id="profileInput" type="file" accept="image/*" hidden>
+      </div>
+      <div class="profile-copy">
+        <p class="eyebrow">Tanışalım</p>
+        <h1 id="profileName">Merhaba</h1>
+        <p class="intro-copy" id="profileIntroduction">Kendini ve üretim yaklaşımını kısaca anlatan yazını buraya ekle.</p>
+        <div class="profile-actions">
+          <button class="button" id="editProfile" type="button">Ön yazıyı düzenle</button>
+          <button class="button secondary" id="viewProjects" type="button">Projelerimi gör</button>
+          <button class="button secondary" id="viewAbout" type="button">Hakkımda sayfası</button>
+        </div>
+      </div>
+    </section>
+    <section class="page-view content-page" data-view-panel="about" hidden>
+      <div class="page-heading">
+        <p class="eyebrow">Daha yakından</p>
+        <h1 id="aboutHeading">Hakkımda</h1>
+        <p class="page-lead" id="aboutLead">Üretim yaklaşımım, deneyimim ve çalışma alanlarım.</p>
+        <button class="button secondary content-edit" type="button" data-edit-content="about">Hakkımda'yı düzenle</button>
+      </div>
+      <div class="page-details" id="aboutDetails">
+        <p>Her projeye ihtiyacı ve anlatılmak istenen fikri anlayarak başlarım. Araştırma, deneme ve görsel anlatımla bu fikri tutarlı bir sonuca taşımayı önemserim.</p>
+      </div>
+    </section>
+    <section class="page-view content-page" data-view-panel="references" hidden>
+      <div class="page-heading">
+        <p class="eyebrow">Birlikte çalıştıklarımız</p>
+        <h1 id="referencesHeading">Referanslar</h1>
+        <p class="page-lead" id="referencesLead">İş birliklerinden seçili geri bildirimler.</p>
+        <button class="button secondary content-edit" type="button" data-edit-content="references">Referansları düzenle</button>
+      </div>
+      <div class="references-list" id="referencesList"><p class="references-empty">Paylaşmaya hazır referans bulunmuyor.</p></div>
+    </section>
+    <section class="page-view content-page" data-view-panel="contact" hidden>
+      <div class="page-heading">
+        <p class="eyebrow">Bir fikrin mi var?</p>
+        <h1 id="contactHeading">Bana Ulaşabilirsiniz</h1>
+        <p class="page-lead" id="contactLead">Yeni projeler, iş birlikleri ve yaratıcı fikirler için benimle iletişime geçebilirsiniz.</p>
+        <button class="button secondary content-edit" type="button" data-edit-content="contact">İletişim bilgilerini düzenle</button>
+      </div>
+      <div class="contact-panel">
+        <h2>İletişim Bilgileri</h2>
+        <p>Size uygun kanaldan mesaj bırakabilir veya doğrudan iletişim kurabilirsiniz.</p>
+        <div class="contact-list">
+          <a class="contact-link" href="tel:+905519500581"><span class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2A19.8 19.8 0 0 1 11.2 19a19.4 19.4 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7l.5 3.2a2 2 0 0 1-.6 1.7L7.1 10.5a16 16 0 0 0 6.4 6.4l1.9-1.9a2 2 0 0 1 1.7-.6l3.2.5a2 2 0 0 1 1.7 2Z"/></svg></span><span><span class="contact-label">Telefon</span>+90 551 950 05 81</span></a>
+          <a class="contact-link" id="contactEmailInfo"><span class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span><span><span class="contact-label">E-posta</span><span id="contactEmailInfoText">canduranboz15923@gmail.com</span></span></a>
+          <a class="contact-link" href="https://www.google.com/maps/search/?api=1&query=Piri%20Reis%20Mahallesi%2C%20Esenyurt%2C%20%C4%B0stanbul" target="_blank" rel="noopener noreferrer"><span class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span><span><span class="contact-label">Konum</span>Piri Reis Mahallesi, Esenyurt / İstanbul</span></a>
+          <a class="contact-link" href="https://www.linkedin.com/in/canduran15923" target="_blank" rel="noopener noreferrer"><span class="contact-icon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5.2 3.5a2.2 2.2 0 1 1 0 4.4 2.2 2.2 0 0 1 0-4.4ZM3.4 9.5H7v11H3.4zm5.8 0h3.5V11h.1a3.9 3.9 0 0 1 3.5-1.9c3.8 0 4.5 2.5 4.5 5.7v5.7h-3.7v-5.1c0-1.2 0-2.8-1.8-2.8s-2.1 1.3-2.1 2.7v5.2H9.2Z"/></svg></span><span><span class="contact-label">LinkedIn</span>linkedin.com/in/canduran15923</span></a>
+        </div>
+        <div class="contact-channels" aria-label="Mesaj gönderme kanalı">
+          <button class="channel-toggle" type="button" data-channel-toggle="email" aria-expanded="false" aria-controls="emailPanel"><span class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span><span><span class="contact-label">E-posta</span><span class="channel-hint">E-posta gönder</span></span><span class="channel-chevron" aria-hidden="true">⌄</span></button>
+          <button class="channel-toggle" type="button" data-channel-toggle="whatsapp" aria-expanded="false" aria-controls="whatsappPanel"><span class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20l1.2-4.7A8.5 8.5 0 1 1 20.5 11.5Z"/><path d="M8.5 8.5c.5 2.5 2.5 4.5 5 5l1.2-1.2 2 .8"/></svg></span><span><span class="contact-label">WhatsApp</span><span class="channel-hint">Mesaj yaz</span></span><span class="channel-chevron" aria-hidden="true">⌄</span></button>
+        </div>
+        <section class="channel-panel" id="emailPanel" hidden>
+          <h3>E-posta ile mesaj gönder</h3>
+          <p id="emailPanelDescription">Mesajınız e-posta uygulamanızda yeni taslak olarak açılır.</p>
+          <a class="channel-email-address" id="contactEmail" hidden><span id="contactEmailText"></span></a>
+          <form class="channel-form" id="emailForm">
+            <label for="emailMessage">Mesajınız</label>
+            <textarea id="emailMessage" name="message" required placeholder="Mesajınızı buraya yazın..."></textarea>
+            <button class="button" type="submit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>E-posta taslağı oluştur</button>
+          </form>
+        </section>
+        <section class="channel-panel" id="whatsappPanel" hidden>
+          <h3>WhatsApp ile mesaj gönder</h3>
+          <p>Mesajınız WhatsApp’ta bu numarayla olan sohbetiniz için hazırlanır.</p>
+          <form class="channel-form" action="https://wa.me/905519500581" method="get" target="_blank" rel="noopener">
+            <label for="whatsappMessage">Mesajınız</label>
+            <textarea id="whatsappMessage" name="text" required placeholder="Mesajınızı buraya yazın..."></textarea>
+            <button class="button" type="submit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20l1.2-4.7A8.5 8.5 0 1 1 20.5 11.5Z"/><path d="m8 12 2.5 2.5L16 9"/></svg>WhatsApp’ta devam et</button>
+          </form>
+        </section>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="shell">
+      <nav class="footer-contacts" aria-label="İletişim bağlantıları">
+        <a class="footer-contact" href="tel:+905519500581"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2A19.8 19.8 0 0 1 11.2 19a19.4 19.4 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7l.5 3.2a2 2 0 0 1-.6 1.7L7.1 10.5a16 16 0 0 0 6.4 6.4l1.9-1.9a2 2 0 0 1 1.7-.6l3.2.5a2 2 0 0 1 1.7 2Z"/></svg><span>+90 551 950 05 81</span></a>
+        <a class="footer-contact" href="https://www.google.com/maps/search/?api=1&query=Piri%20Reis%20Mahallesi%2C%20Esenyurt%2C%20%C4%B0stanbul" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Piri Reis Mahallesi, Esenyurt / İstanbul</span></a>
+        <a class="footer-contact" href="https://www.linkedin.com/in/canduran15923" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5.2 3.5a2.2 2.2 0 1 1 0 4.4 2.2 2.2 0 0 1 0-4.4ZM3.4 9.5H7v11H3.4zm5.8 0h3.5V11h.1a3.9 3.9 0 0 1 3.5-1.9c3.8 0 4.5 2.5 4.5 5.7v5.7h-3.7v-5.1c0-1.2 0-2.8-1.8-2.8s-2.1 1.3-2.1 2.7v5.2H9.2Z"/></svg><span>LinkedIn</span></a>
+        <a class="footer-contact" id="footerEmail" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span id="footerEmailText"></span></a>
+      </nav>
+      <p class="footer-note">Kişisel portfolyo <span aria-hidden="true">·</span> Tüm görseller bu tarayıcıda saklanır</p>
+    </div>
+  </footer>
+
+  <dialog id="projectDialog" aria-labelledby="formTitle">
+    <div class="dialog-head"><h2 id="formTitle">Yeni proje</h2><button class="close-button" type="button" data-close aria-label="Kapat">×</button></div>
+    <form id="projectForm">
+      <div class="form-body">
+        <label class="field"><span class="field-label">Proje adı</span><input name="title" required maxlength="80" placeholder="Örn. Kıyı çizgisi"></label>
+        <label class="field"><span class="field-label">Kısa açıklama</span><textarea name="description" maxlength="300" placeholder="Bu proje hakkında birkaç kelime..."></textarea></label>
+        <label class="field"><span class="field-label">Tür</span><select name="category"><option>Proje</option><option>Tasarım</option><option>Fotoğraf</option><option>İllüstrasyon</option><option>Diğer</option></select></label>
+        <label class="field"><span class="field-label">YouTube / Instagram video bağlantısı</span><input name="videoUrl" type="url" placeholder="https://..."><span class="project-description">YouTube videosu sayfada oynatılır; Instagram bağlantısı açılır.</span></label>
+        <div class="field"><span class="field-label">Görseller</span>
+          <div class="drop-area" id="dropArea">
+            <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 16V4m0 0L7 9m5-5 5 5M4 16v4h16v-4"/></svg><p>Görselleri buraya sürükle<br>veya <label for="imageInput">dosyalarından seç</label></p></div>
+          </div>
+          <input id="imageInput" type="file" accept="image/*" multiple hidden>
+          <div class="previews" id="previews"></div>
+        </div>
+        <div class="dialog-actions"><button class="button secondary" type="button" data-close>Vazgeç</button><button class="button" type="submit">Projeyi kaydet</button></div>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="detailDialog" aria-label="Proje detayları">
+    <div class="dialog-head"><h2>Proje detayı</h2><button class="close-button" type="button" data-close aria-label="Kapat">×</button></div>
+    <div id="detailContent"></div>
+  </dialog>
+  <dialog id="profileDialog" aria-labelledby="profileDialogTitle">
+    <div class="dialog-head"><h2 id="profileDialogTitle">Ana sayfa yazısını düzenle</h2><button class="close-button" type="button" data-close aria-label="Kapat">×</button></div>
+    <form id="profileForm">
+      <div class="form-body">
+        <label class="field"><span class="field-label">Başlık</span><input name="displayName" maxlength="70" placeholder="Örn. Merhaba, ben Ece"></label>
+        <label class="field"><span class="field-label">Kısa tanıtım yazısı</span><textarea name="introduction" required placeholder="Kendini ve çalışmalarını kısaca anlat..."></textarea></label>
+        <div class="dialog-actions"><button class="button secondary" type="button" data-close>Vazgeç</button><button class="button" type="submit">Kaydet</button></div>
+      </div>
+    </form>
+  </dialog>
+  <dialog id="contentDialog" aria-labelledby="contentDialogTitle">
+    <div class="dialog-head"><h2 id="contentDialogTitle">Sayfayı düzenle</h2><button class="close-button" type="button" data-close aria-label="Kapat">×</button></div>
+    <form id="contentForm">
+      <div class="form-body">
+        <label class="field"><span class="field-label">Başlık</span><input name="heading" required maxlength="80"></label>
+        <label class="field"><span class="field-label">Kısa açıklama</span><textarea name="lead" required maxlength="400"></textarea></label>
+        <label class="field" data-editor-field="about" hidden><span class="field-label">Hakkımda detayları</span><textarea name="body"></textarea></label>
+        <label class="field" data-editor-field="references" hidden><span class="field-label">Referanslar</span><textarea name="references" maxlength="3000" placeholder="Her referansı ayrı satıra yaz"></textarea></label>
+        <label class="field" data-editor-field="contact" hidden><span class="field-label">E-posta adresi</span><input name="email" type="email" maxlength="160" placeholder="ornek@eposta.com"></label>
+        <div class="dialog-actions"><button class="button secondary" type="button" data-close>Vazgeç</button><button class="button" type="submit">Kaydet</button></div>
+      </div>
+    </form>
+  </dialog>
+  <script>
+    const databaseName = 'kişisel-portfolyo';
+    const databaseVersion = 2;
+    const grid = document.querySelector('#projectGrid');
+    const emptyState = document.querySelector('#emptyState');
+    const count = document.querySelector('#projectCount');
+    const projectDialog = document.querySelector('#projectDialog');
+    const detailDialog = document.querySelector('#detailDialog');
+    const form = document.querySelector('#projectForm');
+    const imageInput = document.querySelector('#imageInput');
+    const dropArea = document.querySelector('#dropArea');
+    const previews = document.querySelector('#previews');
+    const siteMenu = document.querySelector('#siteMenu');
+    const menuTrigger = document.querySelector('#menuTrigger');
+    const profileInput = document.querySelector('#profileInput');
+    const profileDrop = document.querySelector('#profileDrop');
+    const profileImage = document.querySelector('#profileImage');
+    const profilePlaceholder = document.querySelector('#profilePlaceholder');
+    const profileDialog = document.querySelector('#profileDialog');
+    const profileForm = document.querySelector('#profileForm');
+    const contentDialog = document.querySelector('#contentDialog');
+    const contentForm = document.querySelector('#contentForm');
+    const isReadOnly = !['localhost', '127.0.0.1'].includes(location.hostname);
+    const canExportSiteData = !isReadOnly || new URLSearchParams(location.search).get('export') === '1';
+    const pageNames = { home: 'Ana Sayfa', about: 'Hakkımda', projects: 'Projeler', references: 'Referanslar', contact: 'İletişim' };
+    const defaultPageContent = {
+      about: {
+        heading: 'Hakkımda',
+        lead: '21 yaşındayım ve İstanbul Avrupa Yakası’nda ikamet ediyorum. Kontrol ve Otomasyon Teknolojisi mezunu olarak endüstriyel otomasyon, elektronik donanım ve CCTV sistemlerindeki saha deneyimimi teknik dokümantasyon ve raporlamayla birleştiriyorum.',
+        body: `**İş Deneyimi**
+
+      **Kedacom Bilişim A.Ş. · Teknik Servis ve Destek Stajyeri**
+      **Ağustos 2025–Mayıs 2026** döneminde CCTV güvenlik kamerası donanımlarının arıza tespit ve onarım süreçlerinde görev aldım. Ölçüm aletleriyle kart kontrolleri gerçekleştirirken elektronik devre şemalarını da aktif biçimde yorumladım; böylece sorunları yalnızca gidermeye değil, kök nedenlerini anlayıp kalıcı çözümler geliştirmeye odaklandım. Sistem arayüzü sorunları yaşayan müşterilere uzaktan erişim yoluyla birinci seviye teknik destek sundum. Bu deneyim, teknik bilgiyi müşteri ihtiyacını gözeten, anlaşılır ve çözüm odaklı bir yaklaşımla bir araya getirmemi sağladı.
+
+      **Defplast Ambalaj · Dönemsel Montaj Elemanı**
+      **Temmuz–Eylül 2024** döneminde fabrika üretim hattındaki montaj operasyonlarına doğrudan katılarak seri üretim akışına destek verdim. İş güvenliği kurallarına bağlı ve üretim alanının düzenini gözeten çalışma biçimimle fabrika ortamının temposunu ve üretim bandı disiplinini yakından tanıdım.
+
+      **Eğitim**
+      İstanbul Üniversitesi-Cerrahpaşa Kontrol ve Otomasyon Teknolojisi ön lisans programını **Temmuz 2026’da** tamamladım. Eğitimim boyunca edindiğim otomasyon ve elektronik altyapısını uygulamalı projelerle pekiştirerek teorik bilgiyi çalışan sistemlere dönüştürme fırsatı buldum.
+
+      **Teknik Projeler**
+
+      **TIA Portal ve Factory IO ile endüstriyel otomasyon ve HMI tasarımları**
+      Sensör geri bildirimli konveyör hatları ile hassas sıvı seviye kontrol senaryolarını PLC merdiven mantığıyla programladım ve Factory IO’nun 3D simülasyon ortamında test ederek doğruladım. Yazılımı modüler ve sürdürülebilir kılmak için fonksiyon blokları (FB), fonksiyonlar (FC), veri blokları (DB) ve organizasyon bloklarından (OB) yararlandım. HMI panellerinde nesne süre ve görünürlük ayarlarıyla akıcı animasyonlar oluşturdum; ayrıca yönetici ve operatörler için şifreli yetkilendirme senaryoları tasarladım. Simülasyon sırasında karşılaştığım mantıksal ve sistemsel sorunları kök neden analiziyle inceleyip giderdim.
+
+      **ESP32-CAM ve Arduino tabanlı akıllı bina güvenlik sistemi**
+      Grup projesinde, hareket algılandığında ESP32-CAM üzerinden fotoğraf çekilmesini ve görüntü ile alarm bilgisinin özel yapılandırılmış Telegram botu aracılığıyla kullanıcıya iletilmesini sağlayan IoT sistemi üzerinde çalıştım. Geliştirme sürecinde bileşenler arasındaki pin çakışmalarını yapılandırmayı yeniden düzenleyerek çözdüm; prototip devrenin montajı ve donanım testlerinin tamamlanmasına katkıda bulundum.
+
+      **DC-DC yükseltici dönüştürücü: devre tasarımı ve simülasyon analizi**
+      Akademik çalışmada boost dönüştürücü topolojisini temel alarak devrenin donanım mimarisini tasarladım. Geçici durum eğrilerinin matematiksel analizi ve netlist doğrulaması üzerinde çalıştım. Üretken yapay zekâ araçlarından yararlanarak analiz ve simülasyon sürecini destekledim; grafiksel verileri teknik sunumlara ve endüstriyel raporlama yaklaşımına uygun proje dokümantasyonuna dönüştürdüm.
+
+      **Teknik Yetkinlikler ve Çalışma Yaklaşımı**
+      Endüstriyel otomasyon tarafında Siemens TIA Portal, PLCSIM, PLC merdiven mantığı, HMI arayüz tasarımı, konveyör ve sensör entegrasyonlarıyla çalışıyorum. Orta seviyedeki C/C++ bilgimi Arduino, ESP32-CAM ve PIC mikrodenetleyicileri; donanım/register yapılandırmaları ile sensör ve röle ağlarındaki deneyimim tamamlıyor. AutoCAD ile 2D teknik çizim ve projelendirme yapıyor; OrCAD, Proteus ve PySpice kullanarak devre tasarımı, simülasyon ve matematiksel analiz yürütüyorum. CCTV donanımlarında arıza tespiti, kök neden analizi, temel lehimleme, komponent ölçümü ve SMD dizgi ile reflow standartlarına aşinalık da teknik çalışma alanlarım arasında.
+
+      Sorunları ezbere çözümlerle geçiştirmek yerine sistematik biçimde incelemeye ve kalıcı sonuca ulaşmaya önem veriyorum. Sahadan ya da testlerden gelen verileri düzenli teknik dokümantasyona dönüştürüyor; MS Word ve Excel’i veri takibi ve raporlama süreçlerinde etkin biçimde kullanıyorum. Üretken yapay zekâ araçlarını iş akışlarıma uyarlıyor, yeniliklere hızlı adapte oluyorum. Değişken çalışma koşullarında öncelikleri belirleyerek sürecin düzenli ilerlemesine katkı sunuyor; müşteri desteği ve saha-ofis koordinasyonunda açık iletişimi önemsiyorum. SMD üretim süreçlerine ilişkin bilgimi Ar-Ge çalışmalarında değerlendirmeyi, çok katmanlı PCB tasarımı alanında gelişerek mevcut teknik temelimi ileri taşımayı hedefliyorum.
+
+      İngilizce seviyem temeldir. Lise döneminde lisanslı okul takımı basketbol oyunculuğu yaptım; masa tenisinde il genelinde **iki birincilik ve bir üçüncülük** kazandım. Teknik çalışmalarımın dışında müzikle ilgileniyor, gitar ve piyano çalıyorum.`
+      },
+      references: { heading: 'Referanslar', lead: 'İş birliklerinden seçili geri bildirimler.', references: '' },
+      contact: { heading: 'Bana Ulaşabilirsiniz', lead: 'Yeni projeler, iş birlikleri ve yaratıcı fikirler için benimle iletişime geçebilirsiniz.', email: 'canduranboz15923@gmail.com' }
+    };
+    let database;
+    let editingId = null;
+    let editingContentPage = null;
+    let pageContent = {};
+    let pendingImages = [];
+    let existingImages = [];
+
+    document.body.classList.toggle('read-only', isReadOnly);
+    document.querySelector('#exportSiteData').hidden = !canExportSiteData;
+
+    function showPage(pageName) {
+      const activePage = pageNames[pageName] ? pageName : 'home';
+      document.querySelectorAll('[data-view-panel]').forEach(panel => {
+        panel.hidden = panel.dataset.viewPanel !== activePage;
+      });
+      document.querySelectorAll('.menu-link').forEach(link => {
+        if (link.dataset.page === activePage) link.setAttribute('aria-current', 'page');
+        else link.removeAttribute('aria-current');
+      });
+      document.querySelector('#addProject').hidden = activePage !== 'projects';
+      document.title = `${pageNames[activePage]} — Kişisel Portfolyo`;
+    }
+
+    function navigateTo(pageName) {
+      if (!pageNames[pageName]) return;
+      if (location.hash !== `#${pageName}`) history.pushState({ pageName }, '', `#${pageName}`);
+      showPage(pageName);
+      siteMenu.close();
+    }
+
+    function openDatabase() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(databaseName, databaseVersion);
+        request.onupgradeneeded = () => {
+          const database = request.result;
+          if (!database.objectStoreNames.contains('projects')) database.createObjectStore('projects', { keyPath: 'id' });
+          if (!database.objectStoreNames.contains('settings')) database.createObjectStore('settings');
+        };
+        request.onsuccess = () => { database = request.result; resolve(database); };
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    function getSetting(key) {
+      return new Promise((resolve, reject) => {
+        const request = database.transaction('settings').objectStore('settings').get(key);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    function saveSetting(key, value) {
+      if (isReadOnly) return Promise.reject(new Error('Yayımlanmış portfolyo salt okunur.'));
+      return new Promise((resolve, reject) => {
+        const transaction = database.transaction('settings', 'readwrite');
+        transaction.objectStore('settings').put(value, key);
+        transaction.oncomplete = resolve;
+        transaction.onerror = () => reject(transaction.error);
+      });
+    }
+
+    function blobToDataUrl(blob) {
+      if (!blob) return Promise.resolve(null);
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(reader.error);
+        reader.readAsDataURL(blob);
+      });
+    }
+
+    function dataUrlToBlob(dataUrl) {
+      const [metadata, encoded] = dataUrl.split(',');
+      const mimeType = metadata.match(/^data:([^;]+)/)?.[1] ?? 'application/octet-stream';
+      const binary = atob(encoded);
+      const bytes = Uint8Array.from(binary, character => character.charCodeAt(0));
+      return new Blob([bytes], { type: mimeType });
+    }
+
+    async function exportSiteData() {
+      const projects = await allProjects();
+      const snapshot = {
+        version: 1,
+        exportedAt: new Date().toISOString(),
+        profileText: await getSetting('profileText') ?? null,
+        profilePhoto: await blobToDataUrl(await getSetting('profilePhoto')),
+        pageContent: await getSetting('pageContent') ?? {},
+        projects: await Promise.all(projects.map(async project => ({
+          ...project,
+          images: await Promise.all(project.images.map(blobToDataUrl))
+        })))
+      };
+      const fileUrl = URL.createObjectURL(new Blob([JSON.stringify(snapshot)], { type: 'application/json' }));
+      const download = document.createElement('a');
+      download.href = fileUrl;
+      download.download = 'portfolio-data.json';
+      download.click();
+      setTimeout(() => URL.revokeObjectURL(fileUrl), 1000);
+    }
+
+    async function loadPublishedSnapshot() {
+      if (!isReadOnly) return;
+      try {
+        const response = await fetch('./portfolio-data.json', { cache: 'no-store' });
+        if (!response.ok) return;
+        const snapshot = await response.json();
+        if (snapshot.version !== 1) return;
+        const transaction = database.transaction(['projects', 'settings'], 'readwrite');
+        const projectStore = transaction.objectStore('projects');
+        const settingStore = transaction.objectStore('settings');
+        projectStore.clear();
+        settingStore.clear();
+        if (snapshot.profileText) settingStore.put(snapshot.profileText, 'profileText');
+        if (snapshot.profilePhoto) settingStore.put(dataUrlToBlob(snapshot.profilePhoto), 'profilePhoto');
+        settingStore.put(snapshot.pageContent ?? {}, 'pageContent');
+        (snapshot.projects ?? []).forEach(project => {
+          projectStore.put({ ...project, images: (project.images ?? []).map(dataUrlToBlob) });
+        });
+        await new Promise((resolve, reject) => {
+          transaction.oncomplete = resolve;
+          transaction.onerror = () => reject(transaction.error);
+          transaction.onabort = () => reject(transaction.error);
+        });
+      } catch (error) {
+        console.error('Yayımlanmış portfolyo verisi yüklenemedi:', error);
+      }
+    }
+
+    async function refreshProfile() {
+      const [photo, introduction] = await Promise.all([getSetting('profilePhoto'), getSetting('profileText')]);
+      profileImage.hidden = !photo;
+      profilePlaceholder.hidden = Boolean(photo);
+      if (photo) profileImage.src = URL.createObjectURL(photo);
+      const profileTitle = document.querySelector('#profileName');
+      const titleText = introduction?.name || 'Merhaba, ben Can Duran Boz';
+      const commaIndex = titleText.indexOf(',');
+      profileTitle.replaceChildren();
+      if (commaIndex !== -1) {
+        const firstLine = document.createElement('span');
+        firstLine.textContent = titleText.slice(0, commaIndex + 1).trim();
+        const secondLine = document.createElement('span');
+        secondLine.textContent = titleText.slice(commaIndex + 1).trim();
+        profileTitle.append(firstLine, secondLine);
+      } else {
+        profileTitle.textContent = titleText;
+      }
+      document.querySelector('#profileIntroduction').textContent = introduction?.text || 'Kontrol ve Otomasyon Teknikeri olarak endüstriyel otomasyon, elektronik donanım ve CCTV sistemlerinde saha deneyimimi geliştiriyorum.';
+    }
+
+    function renderPageContent() {
+      const about = pageContent.about;
+      document.querySelector('#aboutHeading').textContent = about.heading;
+      document.querySelector('#aboutLead').textContent = about.lead;
+      renderAboutBody(document.querySelector('#aboutDetails'), about.body);
+
+      const references = pageContent.references;
+      document.querySelector('#referencesHeading').textContent = references.heading;
+      document.querySelector('#referencesLead').textContent = references.lead;
+      const referenceList = document.querySelector('#referencesList');
+      referenceList.replaceChildren();
+      const items = references.references.split('\n').map(item => item.trim()).filter(Boolean);
+      if (items.length) {
+        items.forEach(item => {
+          const quote = document.createElement('blockquote');
+          quote.className = 'reference-item';
+          quote.textContent = item;
+          referenceList.append(quote);
+        });
+      } else {
+        const empty = document.createElement('p');
+        empty.className = 'references-empty';
+        empty.textContent = 'Paylaşmaya hazır referans bulunmuyor.';
+        referenceList.append(empty);
+      }
+
+      const contact = pageContent.contact;
+      document.querySelector('#contactHeading').textContent = contact.heading;
+      document.querySelector('#contactLead').textContent = contact.lead;
+      const emailLink = document.querySelector('#contactEmail');
+      const emailInfoLink = document.querySelector('#contactEmailInfo');
+      const footerEmail = document.querySelector('#footerEmail');
+      emailLink.hidden = !contact.email;
+      emailInfoLink.hidden = !contact.email;
+      footerEmail.hidden = !contact.email;
+      if (contact.email) {
+        emailLink.href = `mailto:${contact.email}`;
+        document.querySelector('#contactEmailText').textContent = contact.email;
+        emailInfoLink.href = `mailto:${contact.email}`;
+        document.querySelector('#contactEmailInfoText').textContent = contact.email;
+        footerEmail.href = `mailto:${contact.email}`;
+        document.querySelector('#footerEmailText').textContent = contact.email;
+      }
+    }
+
+    function renderAboutBody(container, text) {
+      container.replaceChildren();
+      const sectionHeadings = new Set(['İş Deneyimi', 'Eğitim', 'Teknik Projeler', 'Teknik Yetkinlikler ve Çalışma Yaklaşımı']);
+      text.split(/\n\s*\n/).map(block => block.trim()).filter(Boolean).forEach(block => {
+        const heading = block.match(/^\*\*([^*]+)\*\*$/);
+        const element = document.createElement(heading ? (sectionHeadings.has(heading[1]) ? 'h2' : 'h3') : 'p');
+        const content = heading ? heading[1] : block;
+        content.split(/(\*\*[^*]+\*\*)/g).forEach(part => {
+          if (part.startsWith('**') && part.endsWith('**')) {
+            const strong = document.createElement('strong');
+            strong.textContent = part.slice(2, -2);
+            element.append(strong);
+          } else {
+            element.append(document.createTextNode(part));
+          }
+        });
+        container.append(element);
+      });
+    }
+
+    async function loadPageContent() {
+      const savedContent = await getSetting('pageContent') ?? {};
+      pageContent = Object.fromEntries(Object.entries(defaultPageContent).map(([page, defaults]) => [page, { ...defaults, ...savedContent[page] }]));
+      const previousAboutText = 'Her projeye ihtiyacı ve anlatılmak istenen fikri anlayarak başlarım. Araştırma, deneme ve görsel anlatımla bu fikri tutarlı bir sonuca taşımayı önemserim.';
+      if (savedContent.about?.body === previousAboutText) pageContent.about.body = defaultPageContent.about.body;
+      const previousAboutLead = 'İstanbul’da, Avrupa Yakası’nda ikamet ediyorum. Kontrol ve Otomasyon Teknolojisi ön lisans mezunu olarak endüstriyel otomasyon, elektronik donanım ve CCTV sistemlerindeki saha deneyimimi teknik dokümantasyon ve raporlamayla birleştiriyorum.';
+      const previousBirthYearLead = '2005 doğumluyum ve İstanbul Avrupa Yakası’nda ikamet ediyorum. Kontrol ve Otomasyon Teknolojisi mezunu olarak endüstriyel otomasyon, elektronik donanım ve CCTV sistemlerindeki saha deneyimimi teknik dokümantasyon ve raporlamayla birleştiriyorum.';
+      if (savedContent.about?.lead === previousAboutLead || savedContent.about?.lead === previousBirthYearLead || savedContent.about?.lead === 'Üretim yaklaşımım, deneyimim ve çalışma alanlarım.') pageContent.about.lead = defaultPageContent.about.lead;
+      const savedAboutBody = savedContent.about?.body ?? '';
+      if (savedAboutBody.includes('Ölçüm aletleriyle donanım kontrolleri gerçekleştirdim') && savedAboutBody.includes('Defplast Ambalaj · Dönemsel Montaj Elemanı')) pageContent.about.body = defaultPageContent.about.body;
+      pageContent.about.body = pageContent.about.body.replace(/^[ \t]*#{2,3}[ \t]+(.+)$/gm, '**$1**');
+      if (savedContent.contact?.heading === 'İletişim' && savedContent.contact?.lead === 'Yeni projeler, iş birlikleri ve yaratıcı fikirler için iletişime geçebilirsin.') {
+        pageContent.contact.heading = defaultPageContent.contact.heading;
+        pageContent.contact.lead = defaultPageContent.contact.lead;
+      }
+      if (!savedContent.contact?.email) pageContent.contact.email = defaultPageContent.contact.email;
+      renderPageContent();
+    }
+
+    function openContentEditor(page) {
+      editingContentPage = page;
+      const content = pageContent[page];
+      contentForm.elements.heading.value = content.heading;
+      contentForm.elements.lead.value = content.lead;
+      contentForm.elements.body.value = content.body ?? '';
+      contentForm.elements.references.value = content.references ?? '';
+      contentForm.elements.email.value = content.email ?? '';
+      document.querySelectorAll('[data-editor-field]').forEach(field => {
+        field.hidden = field.dataset.editorField !== page;
+      });
+      document.querySelector('#contentDialogTitle').textContent = `${content.heading} sayfasını düzenle`;
+      contentDialog.showModal();
+    }
+
+    async function openProfileEditor() {
+      const introduction = await getSetting('profileText');
+      profileForm.elements.displayName.value = introduction?.name ?? '';
+      profileForm.elements.introduction.value = introduction?.text ?? '';
+      profileDialog.showModal();
+    }
+
+    async function saveProfilePhoto(file) {
+      if (!file?.type.startsWith('image/')) return;
+      await saveSetting('profilePhoto', file);
+      await refreshProfile();
+    }
+
+    function allProjects() {
+      return new Promise((resolve, reject) => {
+        const request = database.transaction('projects').objectStore('projects').getAll();
+        request.onsuccess = () => resolve(request.result.sort((a, b) => b.createdAt - a.createdAt));
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    function saveProject(project) {
+      if (isReadOnly) return Promise.reject(new Error('Yayımlanmış portfolyo salt okunur.'));
+      return new Promise((resolve, reject) => {
+        const transaction = database.transaction('projects', 'readwrite');
+        transaction.objectStore('projects').put(project);
+        transaction.oncomplete = resolve;
+        transaction.onerror = () => reject(transaction.error);
+      });
+    }
+
+    function deleteProject(id) {
+      if (isReadOnly) return Promise.reject(new Error('Yayımlanmış portfolyo salt okunur.'));
+      return new Promise((resolve, reject) => {
+        const transaction = database.transaction('projects', 'readwrite');
+        transaction.objectStore('projects').delete(id);
+        transaction.oncomplete = resolve;
+        transaction.onerror = () => reject(transaction.error);
+      });
+    }
+
+    function makeIcon(name) {
+      const paths = {
+        edit: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/>',
+        delete: '<path d="M3 6h18M8 6V4h8v2m3 0-1 14H6L5 6m4 4v6m6-6v6"/>'
+      };
+      return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name]}</svg>`;
+    }
+
+    function refresh() {
+      return allProjects().then(projects => {
+        grid.replaceChildren();
+        count.textContent = `${projects.length} ${projects.length === 1 ? 'proje' : 'proje'}`;
+        emptyState.hidden = projects.length > 0;
+        projects.forEach((project, index) => {
+          const card = document.createElement('article');
+          card.className = 'project';
+          card.style.animationDelay = `${Math.min(index * 55, 275)}ms`;
+          const cover = document.createElement('button');
+          cover.type = 'button';
+          cover.className = 'project-cover';
+          cover.setAttribute('aria-label', `${project.title} projesini görüntüle`);
+          if (project.images.length) {
+            const image = document.createElement('img');
+            image.src = URL.createObjectURL(project.images[0]);
+            image.alt = project.title;
+            cover.append(image);
+          } else {
+            const placeholder = document.createElement('span');
+            placeholder.className = 'project-placeholder';
+            placeholder.textContent = project.title.slice(0, 1).toLocaleUpperCase('tr-TR');
+            cover.append(placeholder);
+          }
+          cover.addEventListener('click', () => showDetails(project));
+          const info = document.createElement('div');
+          info.className = 'project-info';
+          const text = document.createElement('div');
+          const title = document.createElement('h3');
+          title.className = 'project-name';
+          title.textContent = project.title;
+          text.append(title);
+          if (project.description) {
+            const description = document.createElement('p');
+            description.className = 'project-description';
+            description.textContent = project.description;
+            text.append(description);
+          }
+          const tools = document.createElement('div');
+          tools.className = 'project-actions';
+          const edit = document.createElement('button');
+          edit.type = 'button'; edit.className = 'icon-button'; edit.innerHTML = makeIcon('edit');
+          edit.setAttribute('aria-label', `${project.title} düzenle`); edit.title = 'Düzenle';
+          edit.addEventListener('click', () => openForm(project));
+          const remove = document.createElement('button');
+          remove.type = 'button'; remove.className = 'icon-button'; remove.innerHTML = makeIcon('delete');
+          remove.setAttribute('aria-label', `${project.title} sil`); remove.title = 'Sil';
+          remove.addEventListener('click', async () => {
+            if (confirm(`“${project.title}” projesini silmek istiyor musun?`)) {
+              await deleteProject(project.id);
+              refresh();
+            }
+          });
+          tools.append(edit, remove);
+          info.append(text, tools);
+          card.append(cover, info);
+          grid.append(card);
+        });
+      });
+    }
+
+    function addFiles(files) {
+      const images = [...files].filter(file => file.type.startsWith('image/'));
+      pendingImages.push(...images);
+      renderPreviews();
+    }
+
+    function renderPreviews() {
+      previews.replaceChildren();
+      existingImages.forEach((image, index) => addPreview(image, index, true));
+      pendingImages.forEach((image, index) => addPreview(image, index, false));
+    }
+
+    function addPreview(image, index, isExisting) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'preview';
+      const preview = document.createElement('img');
+      preview.src = URL.createObjectURL(image);
+      preview.alt = 'Proje görseli';
+      const remove = document.createElement('button');
+      remove.type = 'button'; remove.textContent = '×'; remove.setAttribute('aria-label', 'Görseli kaldır');
+      remove.addEventListener('click', () => {
+        if (isExisting) existingImages.splice(index, 1);
+        else pendingImages.splice(index, 1);
+        renderPreviews();
+      });
+      wrapper.append(preview, remove);
+      previews.append(wrapper);
+    }
+
+    function openForm(project = null) {
+      editingId = project?.id ?? null;
+      existingImages = project ? [...project.images] : [];
+      pendingImages = [];
+      form.reset();
+      document.querySelector('#formTitle').textContent = project ? 'Projeyi düzenle' : 'Yeni proje';
+      form.elements.title.value = project?.title ?? '';
+      form.elements.description.value = project?.description ?? '';
+      form.elements.category.value = project?.category ?? 'Proje';
+      form.elements.videoUrl.value = project?.videoUrl ?? '';
+      renderPreviews();
+      projectDialog.showModal();
+    }
+
+    function parseVideoUrl(value) {
+      if (!value) return null;
+      try {
+        const url = new URL(value);
+        const hostname = url.hostname.toLowerCase().replace(/^www\./, '');
+        if (url.protocol !== 'https:') return null;
+        if (hostname === 'instagram.com') return { platform: 'Instagram', url: url.href };
+        if (hostname !== 'youtube.com' && hostname !== 'm.youtube.com' && hostname !== 'youtu.be') return null;
+        const videoId = hostname === 'youtu.be'
+          ? url.pathname.split('/').filter(Boolean)[0]
+          : url.searchParams.get('v') ?? url.pathname.match(/^\/(?:embed|shorts)\/([^/]+)/)?.[1];
+        if (!videoId || !/^[\w-]{11}$/.test(videoId)) return null;
+        return { platform: 'YouTube', url: url.href, embedUrl: `https://www.youtube-nocookie.com/embed/${videoId}` };
+      } catch {
+        return null;
+      }
+    }
+
+    function showDetails(project) {
+      const content = document.querySelector('#detailContent');
+      content.replaceChildren();
+      if (project.images.length) {
+        const gallery = document.createElement('div');
+        gallery.className = 'detail-gallery';
+        project.images.forEach((blob, index) => {
+          const image = document.createElement('img');
+          image.src = URL.createObjectURL(blob);
+          image.alt = `${project.title}, görsel ${index + 1}`;
+          gallery.append(image);
+        });
+        content.append(gallery);
+      }
+      const video = parseVideoUrl(project.videoUrl);
+      if (video?.embedUrl) {
+        const frame = document.createElement('div');
+        frame.className = 'video-frame';
+        const player = document.createElement('iframe');
+        player.src = video.embedUrl;
+        player.title = `${project.title} YouTube videosu`;
+        player.loading = 'lazy';
+        player.referrerPolicy = 'strict-origin-when-cross-origin';
+        player.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        player.allowFullscreen = true;
+        frame.append(player);
+        content.append(frame);
+      } else if (video) {
+        const link = document.createElement('a');
+        link.className = 'video-link';
+        link.href = video.url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = 'Instagram videosunu aç ↗';
+        content.append(link);
+      }
+      const copy = document.createElement('div');
+      copy.className = 'detail-copy';
+      const topline = document.createElement('div');
+      topline.className = 'detail-topline';
+      const title = document.createElement('h2');
+      title.textContent = project.title;
+      const category = document.createElement('span');
+      category.className = 'detail-category';
+      category.textContent = project.category;
+      topline.append(title, category);
+      copy.append(topline);
+      if (project.description) {
+        const description = document.createElement('p');
+        description.textContent = project.description;
+        copy.append(description);
+      }
+      content.append(copy);
+      detailDialog.showModal();
+    }
+
+    document.querySelectorAll('[data-close]').forEach(button => button.addEventListener('click', () => button.closest('dialog').close()));
+    document.querySelector('#exportSiteData').addEventListener('click', exportSiteData);
+    menuTrigger.addEventListener('click', () => {
+      siteMenu.showModal();
+      menuTrigger.setAttribute('aria-expanded', 'true');
+    });
+    document.querySelector('#closeMenu').addEventListener('click', () => siteMenu.close());
+    siteMenu.addEventListener('close', () => menuTrigger.setAttribute('aria-expanded', 'false'));
+    siteMenu.addEventListener('click', event => { if (event.target === siteMenu) siteMenu.close(); });
+    document.querySelectorAll('.menu-link').forEach(link => link.addEventListener('click', () => navigateTo(link.dataset.page)));
+    document.querySelector('#homeLink').addEventListener('click', event => { event.preventDefault(); navigateTo('home'); });
+    window.addEventListener('popstate', () => showPage(location.hash.slice(1)));
+    showPage(location.hash.slice(1) || 'home');
+    document.querySelector('#editProfile').addEventListener('click', openProfileEditor);
+    document.querySelector('#viewProjects').addEventListener('click', () => navigateTo('projects'));
+    document.querySelector('#viewAbout').addEventListener('click', () => navigateTo('about'));
+    document.querySelectorAll('[data-edit-content]').forEach(button => {
+      button.addEventListener('click', () => openContentEditor(button.dataset.editContent));
+    });
+    document.querySelectorAll('[data-channel-toggle]').forEach(button => {
+      button.addEventListener('click', () => {
+        const panel = document.querySelector(`#${button.dataset.channelToggle}Panel`);
+        const shouldOpen = button.getAttribute('aria-expanded') !== 'true';
+        document.querySelectorAll('[data-channel-toggle]').forEach(otherButton => {
+          const otherPanel = document.querySelector(`#${otherButton.dataset.channelToggle}Panel`);
+          otherButton.setAttribute('aria-expanded', 'false');
+          otherPanel.hidden = true;
+        });
+        button.setAttribute('aria-expanded', String(shouldOpen));
+        panel.hidden = !shouldOpen;
+        if (shouldOpen) requestAnimationFrame(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+      });
+    });
+    document.querySelector('#emailForm').addEventListener('submit', event => {
+      event.preventDefault();
+      const message = document.querySelector('#emailMessage').value.trim();
+      const subject = encodeURIComponent('Portfolyo üzerinden iletişim');
+      const body = encodeURIComponent(message);
+      window.location.href = `mailto:${pageContent.contact.email}?subject=${subject}&body=${body}`;
+    });
+    contentForm.addEventListener('submit', async event => {
+      event.preventDefault();
+      const updated = {
+        ...pageContent[editingContentPage],
+        heading: contentForm.elements.heading.value.trim(),
+        lead: contentForm.elements.lead.value.trim()
+      };
+      if (editingContentPage === 'about') updated.body = contentForm.elements.body.value.trim();
+      if (editingContentPage === 'references') updated.references = contentForm.elements.references.value.trim();
+      if (editingContentPage === 'contact') updated.email = contentForm.elements.email.value.trim();
+      pageContent[editingContentPage] = updated;
+      await saveSetting('pageContent', pageContent);
+      contentDialog.close();
+      renderPageContent();
+    });
+    contentDialog.addEventListener('click', event => { if (event.target === contentDialog) contentDialog.close(); });
+    profileInput.addEventListener('change', async event => {
+      await saveProfilePhoto(event.target.files[0]);
+      profileInput.value = '';
+    });
+    ['dragenter', 'dragover'].forEach(type => profileDrop.addEventListener(type, event => { event.preventDefault(); profileDrop.classList.add('dragging'); }));
+    ['dragleave', 'drop'].forEach(type => profileDrop.addEventListener(type, event => { event.preventDefault(); profileDrop.classList.remove('dragging'); }));
+    profileDrop.addEventListener('drop', event => saveProfilePhoto([...event.dataTransfer.files].find(file => file.type.startsWith('image/'))));
+    profileForm.addEventListener('submit', async event => {
+      event.preventDefault();
+      await saveSetting('profileText', {
+        name: profileForm.elements.displayName.value.trim(),
+        text: profileForm.elements.introduction.value.trim()
+      });
+      profileDialog.close();
+      await refreshProfile();
+    });
+    document.querySelector('#addProject').addEventListener('click', () => openForm());
+    document.querySelector('#emptyAdd').addEventListener('click', () => openForm());
+    imageInput.addEventListener('change', event => { addFiles(event.target.files); imageInput.value = ''; });
+    ['dragenter', 'dragover'].forEach(type => dropArea.addEventListener(type, event => { event.preventDefault(); dropArea.classList.add('dragging'); }));
+    ['dragleave', 'drop'].forEach(type => dropArea.addEventListener(type, event => { event.preventDefault(); dropArea.classList.remove('dragging'); }));
+    dropArea.addEventListener('drop', event => addFiles(event.dataTransfer.files));
+    projectDialog.addEventListener('click', event => { if (event.target === projectDialog) projectDialog.close(); });
+    detailDialog.addEventListener('click', event => { if (event.target === detailDialog) detailDialog.close(); });
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      const videoUrl = form.elements.videoUrl.value.trim();
+      const video = parseVideoUrl(videoUrl);
+      if (videoUrl && !video) {
+        form.elements.videoUrl.setCustomValidity('Geçerli bir YouTube veya Instagram HTTPS bağlantısı ekle.');
+        form.elements.videoUrl.reportValidity();
+        return;
+      }
+      const previous = editingId ? (await allProjects()).find(project => project.id === editingId) : null;
+      const project = {
+        id: editingId ?? crypto.randomUUID(),
+        title: form.elements.title.value.trim(),
+        description: form.elements.description.value.trim(),
+        category: form.elements.category.value,
+        videoUrl: video?.url ?? '',
+        images: [...existingImages, ...pendingImages],
+        createdAt: previous?.createdAt ?? Date.now()
+      };
+      await saveProject(project);
+      projectDialog.close();
+      await refresh();
+    });
+    form.elements.videoUrl.addEventListener('input', () => form.elements.videoUrl.setCustomValidity(''));
+
+    openDatabase().then(async () => {
+      await loadPublishedSnapshot();
+      await refresh();
+      await refreshProfile();
+      await loadPageContent();
+    }).catch(error => {
+      console.error('Portfolyo verileri açılamadı:', error);
+      emptyState.hidden = false;
+      document.querySelector('#emptyState p').textContent = 'Bu tarayıcı yerel kayıtları desteklemiyor. Başka bir tarayıcıda yeniden deneyebilirsin.';
+    });
+  </script>
+</body>
+</html>
